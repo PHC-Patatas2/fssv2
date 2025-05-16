@@ -42,5 +42,5 @@
 
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import NavLink from '@/Components/NavLink.vue';
+import NavLink from '@/components/NavLink.vue';
 </script>
