@@ -32,78 +32,115 @@ const submit = () => {
 <template>
     <GuestLayout>
         <Head title="Log in" />
-
-        <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
-            {{ status }}
-        </div>
-
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
-
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
-
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="current-password"
-                />
-
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="mt-4 block">
-                <label class="flex items-center">
-                    <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ms-2 text-sm text-gray-600"
-                        >Remember me</span
+        <div class="login-container">
+            <div class="login-card">
+                <h2 class="login-title">Login</h2>
+                <form @submit.prevent="submit" class="login-form">
+                    <div>
+                        <InputLabel for="email" value="Email" />
+                        <TextInput
+                            id="email"
+                            type="email"
+                            v-model="form.email"
+                            required
+                            autofocus
+                            autocomplete="username"
+                        />
+                        <InputError :message="form.errors.email" />
+                    </div>
+                    <div>
+                        <InputLabel for="password" value="Password" />
+                        <TextInput
+                            id="password"
+                            type="password"
+                            v-model="form.password"
+                            required
+                            autocomplete="current-password"
+                        />
+                        <InputError :message="form.errors.password" />
+                    </div>
+                    <div class="login-row">
+                        <label>
+                            <Checkbox name="remember" v-model:checked="form.remember" />
+                            <span>Remember me</span>
+                        </label>
+                        <Link
+                            v-if="canResetPassword"
+                            :href="route('password.request')"
+                            class="login-link"
+                        >
+                            Forgot password?
+                        </Link>
+                    </div>
+                    <PrimaryButton
+                        :disabled="form.processing"
+                        class="login-btn"
                     >
-                </label>
-            </div>
-
-            <div class="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                    <Link
-                        v-if="canResetPassword"
-                        :href="route('password.request')"
-                        class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    >
-                        Forgot your password?
-                    </Link>
-                </div>
-                <div>
+                        Log in
+                    </PrimaryButton>
+                </form>
+                <div class="login-footer">
                     <Link
                         :href="route('register')"
-                        class="rounded-md text-sm text-blue-600 underline hover:text-blue-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        class="login-link"
                     >
                         Register as Scheduler
                     </Link>
                 </div>
-                <PrimaryButton
-                    class="ms-0 sm:ms-4 mt-2 sm:mt-0"
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Log in
-                </PrimaryButton>
             </div>
-        </form>
+        </div>
     </GuestLayout>
 </template>
+
+<style scoped>
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    justify-content: center;
+    background: #f3f3f3;
+}
+.login-card {
+    width: 100%;
+    max-width: 400px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    padding: 2rem;
+    margin-top: 1rem;
+}
+.login-title {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #222;
+}
+.login-form > div {
+    margin-bottom: 1rem;
+}
+.login-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+.login-link {
+    color: #2563eb;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+.login-btn {
+    width: 100%;
+    margin-top: 0.5rem;
+}
+.login-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1.5rem;
+    gap: 0.5rem;
+}
+</style>
