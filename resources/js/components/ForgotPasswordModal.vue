@@ -1,9 +1,9 @@
 <script setup>
 import Modal from '@/components/Modal.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import InputError from '@/components/InputError.vue';
+import InputLabel from '@/components/InputLabel.vue';
+import PrimaryButton from '@/components/PrimaryButton.vue';
+import TextInput from '@/components/TextInput.vue';
 import { useForm } from '@inertiajs/vue3';
 import { computed, watch } from 'vue';
 
@@ -40,12 +40,12 @@ watch(() => props.show, (val) => {
       <form @submit.prevent="submit" class="space-y-6">
         <div>
           <InputLabel forId="email" value="Email" />
-          <TextInput id="email" type="email" v-model="form.email" required autofocus autocomplete="username" class="mt-1 block w-full" aria-label="Email address" />
+          <TextInput id="email" type="email" v-model="form.email" required autofocus autocomplete="username" class="mt-1 block w-full" aria-label="Email address" placeholder="Enter your email" />
           <InputError :message="form.errors.email" class="mt-2" />
         </div>
-        <div class="flex items-center justify-end mt-4 gap-2">
+        <div class="flex flex-col items-center justify-center mt-4 gap-2">
           <PrimaryButton :disabled="form.processing" class="!text-xs">Email Password Reset Link</PrimaryButton>
-          <button type="button" class="text-xs text-gray-400 hover:text-gray-600 ml-2" @click="emit('close')" aria-label="Cancel password reset modal">Cancel</button>
+          <button type="button" class="text-xs text-gray-400 hover:text-gray-600 mt-2" @click="emit('close')" aria-label="Cancel password reset modal">Cancel</button>
         </div>
       </form>
     </div>

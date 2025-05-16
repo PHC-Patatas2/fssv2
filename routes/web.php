@@ -26,6 +26,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/admin/user-approvals', [UserApprovalController::class, 'index'])->name('admin.user-approvals');
     Route::post('/admin/user-approvals/{id}/approve', [UserApprovalController::class, 'approve'])->name('admin.user-approvals.approve');
     Route::post('/admin/user-approvals/{id}/decline', [UserApprovalController::class, 'decline'])->name('admin.user-approvals.decline');
+    Route::get('/admin/dashboard', function () {
+        return Inertia::render('Admin/Dashboard');
+    })->name('admin.dashboard');
+    Route::get('/admin/create-schedule', function () {
+        return Inertia::render('Admin/CreateSchedule');
+    })->name('admin.create-schedule');
+    Route::get('/admin/manage-schedules', function () {
+        return Inertia::render('Admin/ManageSchedules');
+    })->name('admin.manage-schedules');
+    Route::get('/admin/records', function () {
+        return Inertia::render('Admin/Records');
+    })->name('admin.records');
+    Route::get('/admin/system-logs', function () {
+        return Inertia::render('Admin/SystemLogs');
+    })->name('admin.system-logs');
 });
 
 Route::middleware('auth')->group(function () {

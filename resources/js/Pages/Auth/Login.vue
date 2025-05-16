@@ -27,7 +27,7 @@
             <button type="button" @click="showForgot = true" class="block ml-auto text-xs text-gray-400 hover:text-gray-600 focus:outline-none px-2 py-1" style="margin-top:2px;margin-bottom:10px;" aria-label="Forgot your password?">Forgot your password?</button>
             <div class="flex flex-col gap-1">
                 <PrimaryButton class="w-full h-10 text-base flex items-center justify-center mt-1" :disabled="form.processing">
-                    Log in
+                    {{ form.processing ? 'Logging in...' : 'Log in' }}
                 </PrimaryButton>
             </div>
         </form>
@@ -41,9 +41,9 @@
 
 <script setup>
 import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import InputError from '@/components/InputError.vue';
+import PrimaryButton from '@/components/PrimaryButton.vue';
+import TextInput from '@/components/TextInput.vue';
 import ForgotPasswordModal from '@/components/ForgotPasswordModal.vue';
 import Notification from '@/components/Notification.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
