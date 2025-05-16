@@ -1,5 +1,7 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import 'dialog-polyfill/dialog-polyfill.css';
+import dialogPolyfill from 'dialog-polyfill';
 
 const props = defineProps({
     show: {
@@ -55,7 +57,12 @@ const closeOnEscape = (e) => {
     }
 };
 
-onMounted(() => document.addEventListener('keydown', closeOnEscape));
+onMounted(() => {
+    if (dialog.value) {
+        dialogPolyfill.registerDialog(dialog.value);
+    }
+    document.addEventListener('keydown', closeOnEscape);
+});
 
 onUnmounted(() => {
     document.removeEventListener('keydown', closeOnEscape);
