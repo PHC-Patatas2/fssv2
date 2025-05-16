@@ -15,7 +15,8 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    if (auth()->user()->role === 'admin') {
+    $user = \Illuminate\Support\Facades\Auth::user();
+    if ($user && $user->role === 'admin') {
         return Inertia::render('AdminDashboard');
     }
     return Inertia::render('SchedulerDashboard');

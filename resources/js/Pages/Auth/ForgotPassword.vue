@@ -4,50 +4,42 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import { Head, useForm } from '@inertiajs/vue3';
+import { Head, Link, useForm } from '@inertiajs/vue3';
 
 defineProps({
-    status: {
-        type: String,
-    },
+    status: String,
 });
 
 const form = useForm({
     email: '',
 });
 
-const submit = () => {
+function submit() {
     form.post(route('password.email'));
-};
+}
 </script>
 
 <template>
     <GuestLayout>
         <Head title="Forgot Password" />
-        <div class="forgot-container">
-            <div class="forgot-card">
-                <div class="forgot-header">
-                    <button @click="$inertia.visit(route('login'))" class="forgot-back">&#8592; Back</button>
-                    <h2 class="forgot-title">Forgot Password</h2>
-                </div>
-                <div class="forgot-desc">
-                    Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.
-                </div>
-                <div v-if="status" class="forgot-status">
-                    {{ status }}
-                </div>
-                <form @submit.prevent="submit" class="forgot-form">
-                    <div>
-                        <InputLabel for="email" value="Email" />
-                        <TextInput id="email" type="email" v-model="form.email" required autofocus autocomplete="username" />
-                        <InputError :message="form.errors.email" />
-                    </div>
-                    <PrimaryButton :disabled="form.processing" class="forgot-btn">Email Password Reset Link</PrimaryButton>
-                </form>
-                <div class="forgot-footer">
-                    <Link :href="route('login')" class="forgot-link">Back to Login</Link>
-                </div>
+        <div class="mb-4 text-sm text-gray-600">
+            Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.
+        </div>
+        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
+            {{ status }}
+        </div>
+        <form @submit.prevent="submit" class="space-y-6">
+            <div>
+                <InputLabel for="email" value="Email" />
+                <TextInput id="email" type="email" v-model="form.email" required autofocus autocomplete="username" class="mt-1 block w-full" />
+                <InputError :message="form.errors.email" class="mt-2" />
             </div>
+            <div class="flex items-center justify-end mt-4">
+                <PrimaryButton :disabled="form.processing">Email Password Reset Link</PrimaryButton>
+            </div>
+        </form>
+        <div class="mt-4 text-center">
+            <Link :href="route('login')" class="underline text-sm text-gray-600 hover:text-gray-900">Back to Login</Link>
         </div>
     </GuestLayout>
 </template>
