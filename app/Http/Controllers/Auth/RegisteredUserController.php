@@ -32,9 +32,35 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
+            'email' => [
+                'required',
+                'string',
+                'lowercase',
+                'email',
+                'max:255',
+            ],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
+
+        $existing = User::where('email', $request->email)->first();
+        if ($existing) {
+            if ($existing->status === 'pending') {
+                // Always show generic pending message, do not reveal password mismatch
+                return redirect()->route('login')->with('status', 'You already have a pending registration. Please wait for admin approval.');
+            } elseif ($existing->status === 'approved') {
+                return redirect()->route('login')->with('status', 'An account with this email already exists.');
+            } elseif ($existing->status === 'declined') {
+                // Allow declined users to re-register: update their info and set to pending
+                $existing->name = $request->name;
+                $existing->password = Hash::make($request->password);
+                $existing->status = 'pending';
+                $existing->save();
+                event(new Registered($existing));
+                return redirect()->route('login')->with('status', 'Your new registration has been submitted and is pending admin approval.');
+            } else {
+                return redirect()->route('login')->with('status', 'An account with this email already exists.');
+            }
+        }
 
         $user = User::create([
             'name' => $request->name,
@@ -46,7 +72,6 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        // Do not log in the user immediately. Redirect to login with a message.
         return redirect()->route('login')->with('status', 'Your account is pending approval by an admin.');
     }
 }

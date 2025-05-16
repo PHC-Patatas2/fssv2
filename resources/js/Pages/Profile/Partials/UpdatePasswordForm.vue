@@ -4,7 +4,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { useForm } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 const passwordInput = ref(null);
 const currentPasswordInput = ref(null);
@@ -31,6 +31,53 @@ const updatePassword = () => {
         },
     });
 };
+
+let currentPasswordErrorTimer = null;
+let passwordErrorTimer = null;
+let passwordConfirmErrorTimer = null;
+
+watch(() => form.errors.current_password, (val) => {
+    if (currentPasswordErrorTimer) clearTimeout(currentPasswordErrorTimer);
+    if (val) {
+        currentPasswordErrorTimer = setTimeout(() => {
+            form.clearErrors('current_password');
+        }, 3000);
+    } else {
+        currentPasswordErrorTimer = null;
+    }
+});
+
+watch(() => form.errors.password, (val) => {
+    if (passwordErrorTimer) clearTimeout(passwordErrorTimer);
+    if (val) {
+        passwordErrorTimer = setTimeout(() => {
+            form.clearErrors('password');
+        }, 3000);
+    } else {
+        passwordErrorTimer = null;
+    }
+});
+
+watch(() => form.errors.password_confirmation, (val) => {
+    if (passwordConfirmErrorTimer) clearTimeout(passwordConfirmErrorTimer);
+    if (val) {
+        passwordConfirmErrorTimer = setTimeout(() => {
+            form.clearErrors('password_confirmation');
+        }, 3000);
+    } else {
+        passwordConfirmErrorTimer = null;
+    }
+});
+
+watch(() => form.current_password, () => {
+    if (form.errors.current_password) form.clearErrors('current_password');
+});
+watch(() => form.password, () => {
+    if (form.errors.password) form.clearErrors('password');
+});
+watch(() => form.password_confirmation, () => {
+    if (form.errors.password_confirmation) form.clearErrors('password_confirmation');
+});
 </script>
 
 <template>

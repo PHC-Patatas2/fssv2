@@ -5,6 +5,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, useForm } from '@inertiajs/vue3';
+import { ref, watch } from 'vue';
 
 const props = defineProps({
     email: {
@@ -22,6 +23,53 @@ const form = useForm({
     email: props.email,
     password: '',
     password_confirmation: '',
+});
+
+let emailErrorTimer = null;
+let passwordErrorTimer = null;
+let passwordConfirmErrorTimer = null;
+
+watch(() => form.errors.email, (val) => {
+    if (emailErrorTimer) clearTimeout(emailErrorTimer);
+    if (val) {
+        emailErrorTimer = setTimeout(() => {
+            form.clearErrors('email');
+        }, 3000);
+    } else {
+        emailErrorTimer = null;
+    }
+});
+
+watch(() => form.errors.password, (val) => {
+    if (passwordErrorTimer) clearTimeout(passwordErrorTimer);
+    if (val) {
+        passwordErrorTimer = setTimeout(() => {
+            form.clearErrors('password');
+        }, 3000);
+    } else {
+        passwordErrorTimer = null;
+    }
+});
+
+watch(() => form.errors.password_confirmation, (val) => {
+    if (passwordConfirmErrorTimer) clearTimeout(passwordConfirmErrorTimer);
+    if (val) {
+        passwordConfirmErrorTimer = setTimeout(() => {
+            form.clearErrors('password_confirmation');
+        }, 3000);
+    } else {
+        passwordConfirmErrorTimer = null;
+    }
+});
+
+watch(() => form.email, () => {
+    if (form.errors.email) form.clearErrors('email');
+});
+watch(() => form.password, () => {
+    if (form.errors.password) form.clearErrors('password');
+});
+watch(() => form.password_confirmation, () => {
+    if (form.errors.password_confirmation) form.clearErrors('password_confirmation');
 });
 
 const submit = () => {

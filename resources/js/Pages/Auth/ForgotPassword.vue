@@ -30,8 +30,8 @@ function submit() {
         </div>
         <form @submit.prevent="submit" class="space-y-6">
             <div>
-                <InputLabel for="email" value="Email" />
-                <TextInput id="email" type="email" v-model="form.email" required autofocus autocomplete="username" class="mt-1 block w-full" />
+                <InputLabel forId="email" value="Email" />
+                <TextInput id="email" type="email" v-model="form.email" required autofocus autocomplete="username" class="mt-1 block w-full" aria-label="Email address" />
                 <InputError :message="form.errors.email" class="mt-2" />
             </div>
             <div class="flex items-center justify-end mt-4">

@@ -6,6 +6,16 @@ const model = defineModel({
     required: true,
 });
 
+const props = defineProps({
+    id: String,
+    ariaLabel: String,
+    ariaDescribedby: String,
+    type: {
+        type: String,
+        default: 'text',
+    },
+});
+
 const input = ref(null);
 
 onMounted(() => {
@@ -19,7 +29,11 @@ defineExpose({ focus: () => input.value.focus() });
 
 <template>
     <input
-        class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+        :id="id"
+        :type="type"
+        :aria-label="ariaLabel"
+        :aria-describedby="ariaDescribedby"
+        class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200 hover:border-indigo-400 hover:ring-2 hover:ring-indigo-100"
         v-model="model"
         ref="input"
     />

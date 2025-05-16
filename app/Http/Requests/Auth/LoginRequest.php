@@ -42,18 +42,35 @@ class LoginRequest extends FormRequest
         $this->ensureIsNotRateLimited();
 
         $user = \App\Models\User::where('email', $this->email)->first();
-        if (! $user || ! \Illuminate\Support\Facades\Hash::check($this->password, $user->password)) {
+        $valid = $user && \Illuminate\Support\Facades\Hash::check($this->password, $user->password);
+
+        if (! $user || ! $valid) {
             \Illuminate\Support\Facades\RateLimiter::hit($this->throttleKey());
             throw \Illuminate\Validation\ValidationException::withMessages([
                 'email' => trans('auth.failed'),
             ]);
         }
-        if ($user->status !== 'approved') {
+        if ($user->status === 'declined') {
+            \Illuminate\Support\Facades\RateLimiter::hit($this->throttleKey());
             throw \Illuminate\Validation\ValidationException::withMessages([
-                'email' => 'Your account is ' . $user->status . '. Please contact the administrator.',
+                'email' => 'Your registration has been declined by the admin. Please submit another registration if you find this a mistake.',
             ]);
         }
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        if ($user->status === 'pending') {
+            \Illuminate\Support\Facades\RateLimiter::hit($this->throttleKey());
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'email' => 'Your account is pending approval. Please wait for admin approval.',
+            ]);
+        }
+        if ($user->status !== 'approved') {
+            \Illuminate\Support\Facades\RateLimiter::hit($this->throttleKey());
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'email' => 'Your account is not approved. Please contact support.',
+            ]);
+        }
+
+        $attempted = Auth::attempt($this->only('email', 'password'), $this->boolean('remember'));
+        if (! $attempted) {
             \Illuminate\Support\Facades\RateLimiter::hit($this->throttleKey());
             throw \Illuminate\Validation\ValidationException::withMessages([
                 'email' => trans('auth.failed'),
@@ -70,7 +87,7 @@ class LoginRequest extends FormRequest
      */
     public function ensureIsNotRateLimited(): void
     {
-        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 3)) {
             return;
         }
 
