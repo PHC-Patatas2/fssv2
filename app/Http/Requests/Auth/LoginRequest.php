@@ -41,10 +41,21 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
+        $user = \App\Models\User::where('email', $this->email)->first();
+        if (! $user || ! \Illuminate\Support\Facades\Hash::check($this->password, $user->password)) {
+            \Illuminate\Support\Facades\RateLimiter::hit($this->throttleKey());
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'email' => trans('auth.failed'),
+            ]);
+        }
+        if ($user->status !== 'approved') {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'email' => 'Your account is ' . $user->status . '. Please contact the administrator.',
+            ]);
+        }
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
-            RateLimiter::hit($this->throttleKey());
-
-            throw ValidationException::withMessages([
+            \Illuminate\Support\Facades\RateLimiter::hit($this->throttleKey());
+            throw \Illuminate\Validation\ValidationException::withMessages([
                 'email' => trans('auth.failed'),
             ]);
         }
