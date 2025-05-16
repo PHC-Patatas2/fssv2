@@ -6,7 +6,11 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return view('welcome');
+    return Inertia::render('Auth/Login', [
+        'canResetPassword' => Route::has('password.request'),
+        'canRegister' => Route::has('register'),
+        'status' => session('status'),
+    ]);
 });
 
 Route::get('/dashboard', function () {

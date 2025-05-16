@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title inertia>{{ config('app.name', 'Laravel') }}</title>
+        <title inertia>{{ $page['props']['title'] ?? ucfirst(str_replace('-', ' ', $page['component'])) }}</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -17,5 +17,16 @@
     </head>
     <body class="font-sans antialiased">
         @inertia
+
+        {{-- Remove app name or Laravel from title if present --}}
+        @push('inertiaHead')
+            <script>
+                document.addEventListener('inertia:finish', function() {
+                    if (document.title.includes(' - ')) {
+                        document.title = document.title.split(' - ')[0];
+                    }
+                });
+            </script>
+        @endpush
     </body>
 </html>
