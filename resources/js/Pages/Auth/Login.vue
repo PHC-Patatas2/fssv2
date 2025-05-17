@@ -1,7 +1,7 @@
 <template>
     <GuestLayout>
         <Head title="Log in" />
-        <Notification v-if="status && showNotification" :message="status" :show="showNotification" :duration="3000" @close="showNotification = false" />
+        <Notification v-if="status && showNotification" :message="status" :show="showNotification" :duration="6000" @close="showNotification = false" />
         <form @submit.prevent="submit" class="w-full max-w-xl space-y-6">
             <div class="mt-4">
                 <span class="block text-xs text-gray-400 mb-1 ml-1">Email</span>
