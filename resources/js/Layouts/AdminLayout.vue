@@ -2,7 +2,19 @@
   <div class="flex min-h-screen bg-gray-100">
     <div class="flex-1 flex flex-col w-full">
       <header class="bg-white shadow sticky top-0 z-30 flex items-center justify-between px-4 sm:px-6 h-16 w-full">
-        <nav class="flex flex-wrap items-center gap-2 sm:gap-4 w-full" aria-label="Main navigation">
+        <!-- Hamburger for mobile -->
+        <button
+          class="sm:hidden flex items-center justify-center p-2 rounded-md text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-200"
+          @click="showMobileNav = !showMobileNav"
+          aria-label="Open main menu"
+        >
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path v-if="!showMobileNav" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+        <!-- Navigation Links -->
+        <nav :class="['flex flex-wrap items-center gap-2 sm:gap-4 w-full', showMobileNav ? 'flex' : 'hidden', 'sm:flex']" aria-label="Main navigation">
           <!-- Group 1: Dashboard -->
           <NavLink :href="route('admin.dashboard')" :class="navActive('/admin/dashboard')" aria-label="Dashboard">
             <i class="fas fa-tachometer-alt mr-1"></i> Dashboard
@@ -52,18 +64,18 @@
         <slot />
       </main>
     </div>
-    <!-- Mobile Hamburger (optional, for future expansion) -->
   </div>
 </template>
 
 <script setup>
+import { ref, computed } from 'vue';
 import NavLink from '@/components/NavLink.vue';
 import Dropdown from '@/components/Dropdown.vue';
 import DropdownLink from '@/components/DropdownLink.vue';
-import { computed } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 
 const page = usePage();
+const showMobileNav = ref(false);
 
 function navActive(path) {
   return page.url.startsWith(path)

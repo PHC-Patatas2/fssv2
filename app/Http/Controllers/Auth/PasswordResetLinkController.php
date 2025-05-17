@@ -27,18 +27,35 @@ class PasswordResetLinkController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request): \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
     {
         $request->validate([
             'email' => 'required|email',
         ]);
 
-        // Always return the same response for security
-        $status = \Illuminate\Support\Facades\Password::sendResetLink(
-            $request->only('email')
-        );
+        // Check if email exists in users table
+        $userExists = \App\Models\User::where('email', $request->email)->exists();
+        if (!$userExists) {
+            $status = 'This email is not registered.';
+        } else {
+            try {
+                $result = \Illuminate\Support\Facades\Password::sendResetLink(
+                    $request->only('email')
+                );
+                $status = $result === \Illuminate\Support\Facades\Password::RESET_LINK_SENT
+                    ? 'Password reset email sent successfully.'
+                    : 'Failed to send password reset email.';
+            } catch (\Exception $e) {
+                $status = 'Failed to send email: ' . $e->getMessage();
+            }
+        }
 
-        // Always return success message, even if email is not found
-        return back()->with('status', __('If your email address exists in our system, you will receive a password reset link shortly.'));
+        // If AJAX or Inertia request, return JSON
+        if ($request->expectsJson() || $request->header('X-Inertia')) {
+            return response()->json(['status' => $status]);
+        }
+
+        // Otherwise, fallback to redirect (for non-AJAX)
+        return back()->with('status', $status);
     }
 }

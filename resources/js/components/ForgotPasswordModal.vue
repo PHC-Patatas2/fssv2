@@ -5,7 +5,8 @@ import InputLabel from '@/components/InputLabel.vue';
 import PrimaryButton from '@/components/PrimaryButton.vue';
 import TextInput from '@/components/TextInput.vue';
 import { useForm } from '@inertiajs/vue3';
-import { computed, watch } from 'vue';
+import { computed, watch, ref } from 'vue';
+import axios from 'axios';
 
 const props = defineProps({
   show: Boolean
@@ -16,10 +17,26 @@ const form = useForm({
   email: '',
 });
 
-function submit() {
-  form.post(route('password.email'), {
-    onSuccess: () => form.reset(),
-  });
+const status = computed(() => form.recentlySuccessful ? form.status : null);
+const statusMessage = ref('');
+
+async function submit() {
+  statusMessage.value = '';
+  form.clearErrors();
+  try {
+    const response = await axios.post(route('password.email'), { email: form.email });
+    statusMessage.value = response.data.status;
+    if (statusMessage.value.includes('success')) form.reset();
+  } catch (error) {
+    if (error.response && error.response.data && error.response.data.status) {
+      statusMessage.value = error.response.data.status;
+    } else if (error.response && error.response.data && error.response.data.errors) {
+      // Show validation error
+      form.setError('email', error.response.data.errors.email?.[0] || 'An error occurred.');
+    } else {
+      statusMessage.value = 'An unexpected error occurred.';
+    }
+  }
 }
 
 watch(() => props.show, (val) => {
@@ -42,6 +59,13 @@ watch(() => props.show, (val) => {
           <InputLabel forId="email" value="Email" />
           <TextInput id="email" type="email" v-model="form.email" required autofocus autocomplete="username" class="mt-1 block w-full" aria-label="Email address" placeholder="Enter your email" />
           <InputError :message="form.errors.email" class="mt-2" />
+        </div>
+        <div v-if="statusMessage" class="mt-2 text-sm text-center" :class="{
+          'text-green-600': statusMessage.includes('success'),
+          'text-red-600': statusMessage.includes('not registered') || statusMessage.includes('Failed'),
+          'text-gray-600': !statusMessage.includes('success') && !statusMessage.includes('not registered') && !statusMessage.includes('Failed')
+        }">
+          {{ statusMessage }}
         </div>
         <div class="flex flex-col items-center justify-center mt-4 gap-2">
           <PrimaryButton :disabled="form.processing" class="!text-xs">Email Password Reset Link</PrimaryButton>

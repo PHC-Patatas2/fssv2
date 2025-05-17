@@ -30,18 +30,18 @@ function submit() {
         <form @submit.prevent="submit" class="space-y-6">
             <div>
                 <InputLabel forId="name" value="Name" />
-                <TextInput id="name" type="text" v-model="form.name" required autofocus autocomplete="name" class="mt-1 block w-full" aria-label="Full name" />
+                <TextInput id="name" type="text" v-model="form.name" required autofocus autocomplete="name" class="mt-1 block w-full" aria-label="Full name" placeholder="Enter your name" />
                 <InputError :message="form.errors.name" class="mt-2" />
             </div>
             <div class="mt-4">
                 <InputLabel forId="email" value="Email" />
-                <TextInput id="email" type="email" v-model="form.email" required autocomplete="email" class="mt-1 block w-full" aria-label="Email address" />
+                <TextInput id="email" type="email" v-model="form.email" required autocomplete="email" class="mt-1 block w-full" aria-label="Email address" placeholder="Enter your email address" />
                 <InputError :message="form.errors.email" class="mt-2" />
             </div>
             <div class="mt-4">
                 <InputLabel forId="password" value="Password" />
                 <div class="relative flex items-center">
-                    <TextInput :type="showPassword ? 'text' : 'password'" id="password" v-model="form.password" required autocomplete="new-password" class="mt-1 block w-full pr-12" aria-label="Password" />
+                    <TextInput :type="showPassword ? 'text' : 'password'" id="password" v-model="form.password" required autocomplete="new-password" class="mt-1 block w-full pr-12" aria-label="Password" placeholder="Enter your password" />
                     <button type="button"
                         @click="showPassword = !showPassword"
                         class="absolute right-2 top-1/2 -translate-y-1/2 flex items-center justify-center h-8 w-8 text-gray-400 hover:text-gray-600 focus:outline-none z-10 transition"
@@ -57,7 +57,7 @@ function submit() {
             <div class="mt-4">
                 <InputLabel forId="password_confirmation" value="Confirm Password" />
                 <div class="relative flex items-center">
-                    <TextInput :type="showPasswordConfirm ? 'text' : 'password'" id="password_confirmation" v-model="form.password_confirmation" required autocomplete="new-password" class="mt-1 block w-full pr-12" aria-label="Confirm password" />
+                    <TextInput :type="showPasswordConfirm ? 'text' : 'password'" id="password_confirmation" v-model="form.password_confirmation" required autocomplete="new-password" class="mt-1 block w-full pr-12" aria-label="Confirm password" placeholder="Confirm your password" />
                     <button type="button"
                         @click="showPasswordConfirm = !showPasswordConfirm"
                         class="absolute right-2 top-1/2 -translate-y-1/2 flex items-center justify-center h-8 w-8 text-gray-400 hover:text-gray-600 focus:outline-none z-10 transition"
@@ -70,8 +70,8 @@ function submit() {
                 </div>
                 <InputError :message="form.errors.password_confirmation" class="mt-2" />
             </div>
-            <div class="flex items-center justify-end mt-4">
-                <PrimaryButton :disabled="form.processing">Register</PrimaryButton>
+            <div class="flex flex-col items-center mt-6">
+                <PrimaryButton class="w-full max-w-xl h-10 text-base flex items-center justify-center" :disabled="form.processing">Register</PrimaryButton>
             </div>
         </form>
         <div class="mt-4 text-center">

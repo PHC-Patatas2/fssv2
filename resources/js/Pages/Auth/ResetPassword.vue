@@ -74,7 +74,13 @@ watch(() => form.password_confirmation, () => {
 
 const submit = () => {
     form.post(route('password.store'), {
-        onFinish: () => form.reset('password', 'password_confirmation'),
+        onError: () => {}, // Do not reset fields on error
+        onFinish: () => {
+            // Only reset fields if there are no errors
+            if (!form.hasErrors) {
+                form.reset('password', 'password_confirmation');
+            }
+        },
     });
 };
 </script>

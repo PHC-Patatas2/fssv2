@@ -22,6 +22,9 @@
                     </button>
                 </div>
                 <InputError :message="form.errors.password" class="mt-2" />
+                <div class="forgot-password-link-container">
+                    <span @click="showForgot = true" class="forgot-password-link" tabindex="0" role="button" aria-label="Forgot your password?">Forgot your password?</span>
+                </div>
             </div>
             <div class="flex flex-col gap-1">
                 <PrimaryButton class="w-full h-10 text-base flex items-center justify-center mt-1" :disabled="form.processing">
@@ -29,9 +32,6 @@
                 </PrimaryButton>
             </div>
         </form>
-        <div class="forgot-password-container">
-            <button type="button" @click="showForgot = true" class="forgot-password-button" aria-label="Forgot your password?">Forgot your password?</button>
-        </div>
         <div class="mt-4 text-center">
             <span class="text-xs text-gray-400">Don't have an account? </span>
             <Link :href="route('register')" class="underline text-xs text-gray-400 hover:text-gray-600">Sign up for the waitlist</Link>
@@ -68,31 +68,29 @@
     outline: none;
 }
 
-.forgot-password-container {
+.forgot-password-link-container {
     display: flex;
-    justify-content: flex-end; /* Aligns button to the right */
-    margin-top: 0.5rem; /* 8px */
-    margin-bottom: 0.5rem; /* 8px */
+    justify-content: flex-end; /* Move to right side */
+    margin-top: 0.6rem; /* Increased from 0.1rem to move it down slightly */
+    margin-bottom: 0.1rem;
+    margin-left: 0.25rem; /* Align with left of password textbox */
 }
-
-.forgot-password-button {
-    font-size: 0.75rem; /* text-xs */
-    color: #ffffff; /* text-white */
-    background-color: #000000; /* bg-black */
-    padding-left: 0.5rem; /* px-2 */
-    padding-right: 0.5rem; /* px-2 */
-    padding-top: 0.25rem; /* py-1 */
-    padding-bottom: 0.25rem; /* py-1 */
-    border-radius: 0.25rem; /* rounded */
-    transition: background-color 0.15s ease-in-out;
-}
-
-.forgot-password-button:hover {
-    background-color: #2563eb; /* hover:bg-blue-700 */
-}
-
-.forgot-password-button:focus {
+.forgot-password-link {
+    font-size: 0.72rem; /* smaller */
+    color: #bdbdbd; /* light gray */
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    text-decoration: none; /* Remove underline */
+    transition: color 0.15s;
     outline: none;
+    display: inline;
+}
+.forgot-password-link:hover, .forgot-password-link:focus {
+    color: #a3a3a3; /* slightly darker gray on hover/focus */
+    text-decoration: none;
 }
 </style>
 
