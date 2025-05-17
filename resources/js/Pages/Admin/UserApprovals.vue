@@ -1,38 +1,47 @@
 <template>
+  <AdminLayout>
     <div class="min-h-screen flex flex-col items-center justify-center bg-gray-100">
-        <div class="bg-white p-8 rounded shadow-md w-full max-w-2xl">
-            <h1 class="text-2xl font-bold mb-4 text-gray-800">Pending User Approvals</h1>
-            <div v-if="pendingUsers.length === 0" class="text-gray-600">No pending users.</div>
-            <table v-else class="min-w-full divide-y divide-gray-200 mt-4">
-                <thead>
-                    <tr>
-                        <th class="px-4 py-2 text-left">Name</th>
-                        <th class="px-4 py-2 text-left">Email</th>
-                        <th class="px-4 py-2 text-left">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="user in pendingUsers" :key="user.id">
-                        <td class="px-4 py-2">{{ user.name }}</td>
-                        <td class="px-4 py-2">{{ user.email }}</td>
-                        <td class="px-4 py-2 flex gap-2">
-                            <form :action="route('admin.user-approvals.approve', user.id)" method="post">
-                                <input type="hidden" name="_token" :value="csrfToken">
-                                <button type="submit" class="bg-green-500 text-white px-3 py-1 rounded">Approve</button>
-                            </form>
-                            <form :action="route('admin.user-approvals.decline', user.id)" method="post">
-                                <input type="hidden" name="_token" :value="csrfToken">
-                                <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded">Decline</button>
-                            </form>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+      <div class="bg-white p-8 rounded shadow-md w-full max-w-2xl">
+        <h1 class="text-2xl font-bold mb-4 text-gray-800 flex items-center gap-2">
+          <i class="fas fa-user-clock text-blue-400" aria-hidden="true"></i> Pending User Approvals
+        </h1>
+        <div v-if="pendingUsers.length === 0" class="text-gray-600">No pending users.</div>
+        <table v-else class="min-w-full divide-y divide-gray-200 mt-4" aria-label="Pending User Approvals Table">
+          <thead>
+            <tr>
+              <th class="px-4 py-2 text-left">Name</th>
+              <th class="px-4 py-2 text-left">Email</th>
+              <th class="px-4 py-2 text-left">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="user in pendingUsers" :key="user.id">
+              <td class="px-4 py-2 flex items-center gap-2"><i class="fas fa-user text-gray-400" aria-hidden="true"></i>{{ user.name }}</td>
+              <td class="px-4 py-2">{{ user.email }}</td>
+              <td class="px-4 py-2 flex gap-2">
+                <form :action="route('admin.user-approvals.approve', user.id)" method="post">
+                  <input type="hidden" name="_token" :value="csrfToken">
+                  <button type="submit" class="bg-green-500 text-white px-3 py-1 rounded transition-transform hover:scale-105 focus:ring-2 focus:ring-green-300" title="Approve user" aria-label="Approve user">
+                    <i class="fas fa-check mr-1" aria-hidden="true"></i>Approve
+                  </button>
+                </form>
+                <form :action="route('admin.user-approvals.decline', user.id)" method="post">
+                  <input type="hidden" name="_token" :value="csrfToken">
+                  <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded transition-transform hover:scale-105 focus:ring-2 focus:ring-red-300" title="Decline user" aria-label="Decline user">
+                    <i class="fas fa-times mr-1" aria-hidden="true"></i>Decline
+                  </button>
+                </form>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
+  </AdminLayout>
 </template>
 
 <script setup>
+import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { router } from '@inertiajs/vue3';
 const props = defineProps({
     pendingUsers: Array,
@@ -40,3 +49,9 @@ const props = defineProps({
 });
 const csrfToken = props.csrf_token || document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 </script>
+
+<style scoped>
+button:focus {
+  outline: none;
+}
+</style>
