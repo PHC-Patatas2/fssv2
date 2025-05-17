@@ -31,6 +31,21 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
+    Route::get('/dashboard', function () {
+        return Inertia::render('Admin/DashboardFallback');
+    })->name('admin.dashboard');
+    Route::get('/create-schedule', function () {
+        return Inertia::render('Admin/ManageSchedules'); // Placeholder, update as needed
+    })->name('admin.create-schedule');
+    Route::get('/manage-schedules', function () {
+        return Inertia::render('Admin/ManageSchedules'); // Placeholder, update as needed
+    })->name('admin.manage-schedules');
+    Route::get('/records', function () {
+        return Inertia::render('Admin/Records'); // Placeholder, update as needed
+    })->name('admin.records');
+    Route::get('/system-logs', function () {
+        return Inertia::render('Admin/SystemLogs'); // Placeholder, update as needed
+    })->name('admin.system-logs');
     Route::get('/user-approvals', [UserApprovalController::class, 'index'])->name('admin.user-approvals');
     Route::post('/user-approvals/{id}/approve', [UserApprovalController::class, 'approve'])->name('admin.user-approvals.approve');
     Route::post('/user-approvals/{id}/decline', [UserApprovalController::class, 'decline'])->name('admin.user-approvals.decline');
