@@ -45,7 +45,7 @@
     position: absolute;
     right: 0.5rem; /* 8px */
     top: 50%;
-    transform: translateY(-50%); /* Adjusted for better centering */
+    transform: translateY(-45%); /* Adjusted for better centering */
     display: flex;
     align-items: center;
     justify-content: center;
