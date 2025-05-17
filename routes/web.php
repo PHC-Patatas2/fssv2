@@ -16,7 +16,18 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return redirect('/')->with('status', 'Dashboards are in progress. You are logged in, but will remain on this page until dashboards are available.');
+    if (!Auth::check()) {
+        return redirect('/')->with('status', 'Please login first.');
+    }
+    $user = Auth::user();
+    if ($user->role === 'admin') {
+        return Inertia::render('Admin/DashboardFallback');
+    } elseif ($user->role === 'scheduler') {
+        return Inertia::render('Scheduler/DashboardFallback');
+    } else {
+        Auth::logout();
+        return redirect('/')->with('status', 'Invalid credentials or role.');
+    }
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {

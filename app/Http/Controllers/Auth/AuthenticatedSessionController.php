@@ -27,17 +27,13 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): Response
+    public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
-
         $request->session()->regenerate();
 
-        // Only render login page with reset password option and session status, no dashboard/role message
-        return Inertia::render('Auth/Login', [
-            'canResetPassword' => Route::has('password.request'),
-            'status' => session('status'),
-        ]);
+        // Redirect to dashboard after successful login
+        return redirect()->intended(route('dashboard'));
     }
 
     /**
@@ -47,10 +43,12 @@ class AuthenticatedSessionController extends Controller
     {
         Auth::guard('web')->logout();
 
+        // Invalidate and flush the session for a true fresh start
         $request->session()->invalidate();
-
+        $request->session()->flush();
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        // Redirect to login page after logout
+        return redirect()->route('login');
     }
 }
