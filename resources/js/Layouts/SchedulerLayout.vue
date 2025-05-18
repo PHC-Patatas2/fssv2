@@ -5,8 +5,6 @@
         <nav class="flex flex-wrap items-center gap-2 sm:gap-4" aria-label="Main navigation">
           <a href="#" class="font-bold text-green-700 underline bg-green-50 px-3 py-2 rounded">Dashboard</a>
           <a href="#" class="text-gray-700 px-3 py-2 rounded hover:bg-green-100">My Schedules</a>
-          <a href="#" class="text-gray-700 px-3 py-2 rounded hover:bg-green-100">Profile</a>
-          <a href="#" class="text-gray-700 px-3 py-2 rounded hover:bg-green-100">Help</a>
         </nav>
         <div class="flex items-center gap-2 relative">
           <!-- User icon and name (right side) -->

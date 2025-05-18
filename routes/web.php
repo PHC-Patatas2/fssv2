@@ -21,7 +21,8 @@ Route::get('/dashboard', function () {
     }
     $user = Auth::user();
     if ($user->role === 'admin') {
-        return Inertia::render('Admin/DashboardFallback');
+        // Use the controller to provide all dashboard props
+        return app(\App\Http\Controllers\AdminDashboardController::class)->index();
     } elseif ($user->role === 'scheduler') {
         return Inertia::render('Scheduler/DashboardFallback');
     } else {
@@ -31,9 +32,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Admin/DashboardFallback');
-    })->name('admin.dashboard');
+    Route::get('/dashboard', [\App\Http\Controllers\AdminDashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/create-schedule', function () {
         return Inertia::render('Admin/ManageSchedules'); // Placeholder, update as needed
     })->name('admin.create-schedule');
