@@ -9,6 +9,7 @@ use Database\Seeders\RoomSeeder;
 use Database\Seeders\ScheduleSeeder;
 use Database\Seeders\ActivityLogSeeder;
 use App\Models\User;
+use Database\Seeders\DemoAcademicSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -25,6 +26,7 @@ class DatabaseSeeder extends Seeder
             RoomSeeder::class,
             ScheduleSeeder::class,
             ActivityLogSeeder::class,
+            DemoAcademicSeeder::class,
         ]);
     }
 }

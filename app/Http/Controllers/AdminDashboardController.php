@@ -11,13 +11,13 @@ class AdminDashboardController extends Controller
 {
     public function index(): Response
     {
-        // User counts by role
-        $totalUsers = User::count();
-        $adminCount = User::where('role', 'admin')->count();
-        $schedulerCount = User::where('role', 'scheduler')->count();
-        $teacherCount = User::where('role', 'teacher')->count();
-        $studentCount = User::where('role', 'student')->count();
-        // Pending approvals
+        // Only count approved users who are admin or scheduler
+        $totalUsers = User::whereIn('role', ['admin', 'scheduler'])
+            ->where('status', 'approved')
+            ->count();
+        $adminCount = User::where('role', 'admin')->where('status', 'approved')->count();
+        $schedulerCount = User::where('role', 'scheduler')->where('status', 'approved')->count();
+        // Pending approvals (for admins to review)
         $pendingApprovals = User::where('status', 'pending')->get();
         // Active schedules
         $activeSchedules = Schedule::where('status', 'active')->count();
@@ -27,12 +27,14 @@ class AdminDashboardController extends Controller
         $teachers = \App\Models\Teacher::all();
         $subjects = \App\Models\Subject::all();
         $users = \App\Models\User::all();
+        $admins = User::where('role', 'admin')->where('status', 'approved')->get();
+        $schedulers = User::where('role', 'scheduler')->where('status', 'approved')->get();
         return Inertia::render('Admin/DashboardFallback', [
             'totalUsers' => $totalUsers,
             'adminCount' => $adminCount,
             'schedulerCount' => $schedulerCount,
-            'teacherCount' => $teacherCount,
-            'studentCount' => $studentCount,
+            'admins' => $admins,
+            'schedulers' => $schedulers,
             'pendingApprovals' => $pendingApprovals,
             'activeSchedules' => $activeSchedules,
             'recentActivity' => $recentActivity,

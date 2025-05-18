@@ -10,72 +10,36 @@ class ScheduleSeeder extends Seeder
     {
         DB::table('schedules')->delete();
         DB::statement('ALTER TABLE schedules AUTO_INCREMENT = 1');
-        DB::table('schedules')->insert([
-            [
+
+        $subjectIds = DB::table('subjects')->pluck('id')->toArray();
+        $teacherIds = DB::table('teachers')->pluck('id')->toArray();
+        $roomIds = DB::table('rooms')->pluck('id')->toArray();
+        $userIds = DB::table('users')->pluck('id')->toArray();
+
+        // Use the minimum count to avoid out-of-bounds
+        $count = min(count($subjectIds), count($teacherIds), count($roomIds), count($userIds), 5);
+        $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+        $startTimes = ['08:00:00', '09:00:00', '10:00:00', '11:00:00', '13:00:00'];
+        $endTimes = ['09:00:00', '10:00:00', '11:00:00', '12:00:00', '14:00:00'];
+
+        $schedules = [];
+        for ($i = 0; $i < $count; $i++) {
+            $schedules[] = [
                 'type' => 'normal',
-                'subject_id' => 1,
-                'teacher_id' => 1,
-                'room_id' => 1,
-                'day' => 'Monday',
-                'start_time' => '08:00:00',
-                'end_time' => '09:00:00',
-                'created_by' => 1,
+                'subject_id' => $subjectIds[$i],
+                'teacher_id' => $teacherIds[$i],
+                'room_id' => $roomIds[$i],
+                'day' => $days[$i],
+                'start_time' => $startTimes[$i],
+                'end_time' => $endTimes[$i],
+                'created_by' => $userIds[$i],
                 'status' => 'active',
                 'created_at' => now(),
                 'updated_at' => now(),
-            ],
-            [
-                'type' => 'normal',
-                'subject_id' => 2,
-                'teacher_id' => 2,
-                'room_id' => 2,
-                'day' => 'Tuesday',
-                'start_time' => '09:00:00',
-                'end_time' => '10:00:00',
-                'created_by' => 2,
-                'status' => 'active',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'type' => 'normal',
-                'subject_id' => 3,
-                'teacher_id' => 3,
-                'room_id' => 3,
-                'day' => 'Wednesday',
-                'start_time' => '10:00:00',
-                'end_time' => '11:00:00',
-                'created_by' => 1,
-                'status' => 'active',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'type' => 'normal',
-                'subject_id' => 4,
-                'teacher_id' => 4,
-                'room_id' => 4,
-                'day' => 'Thursday',
-                'start_time' => '11:00:00',
-                'end_time' => '12:00:00',
-                'created_by' => 2,
-                'status' => 'active',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'type' => 'normal',
-                'subject_id' => 5,
-                'teacher_id' => 5,
-                'room_id' => 5,
-                'day' => 'Friday',
-                'start_time' => '13:00:00',
-                'end_time' => '14:00:00',
-                'created_by' => 1,
-                'status' => 'active',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-        ]);
+            ];
+        }
+        if ($count > 0) {
+            DB::table('schedules')->insert($schedules);
+        }
     }
 }

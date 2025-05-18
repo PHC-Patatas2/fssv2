@@ -23,6 +23,8 @@ return new class extends Migration {
             $table->foreign('teacher_id')->references('id')->on('teachers')->nullOnDelete();
             $table->foreign('room_id')->references('id')->on('rooms')->nullOnDelete();
             $table->foreign('created_by')->references('id')->on('users')->cascadeOnDelete();
+            
+            $table->unique(['subject_id', 'teacher_id', 'room_id', 'day', 'start_time', 'end_time'], 'unique_schedule');
         });
     }
     public function down(): void

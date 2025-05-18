@@ -11,13 +11,13 @@
             </svg>
           </button>
           <!-- Main nav for large screens -->
-          <nav ref="navRef" class="hidden lg:flex flex-nowrap whitespace-nowrap items-center gap-2 sm:gap-4 flex-1 justify-center" aria-label="Main navigation">
-            <a href="/admin/dashboard" class="font-bold text-blue-700 underline bg-blue-50 px-3 py-2 rounded transition">Dashboard</a>
-            <a href="/admin/schedules" class="text-gray-700 px-3 py-2 rounded hover:bg-blue-100 transition">Schedules</a>
-            <a href="/admin/users" class="text-gray-700 px-3 py-2 rounded hover:bg-blue-100 transition">Users</a>
-            <a href="/admin/rooms" class="text-gray-700 px-3 py-2 rounded hover:bg-blue-100 transition">Rooms/Resources</a>
-            <a href="/admin/export" class="text-gray-700 px-3 py-2 rounded hover:bg-blue-100 transition">Export Data</a>
-            <a href="/admin/settings" class="text-gray-700 px-3 py-2 rounded hover:bg-blue-100 transition">System Settings</a>
+          <nav ref="navRef" class="hidden lg:flex flex-nowrap whitespace-nowrap items-center gap-2 sm:gap-4 flex-1 justify-start" aria-label="Main navigation">
+            <a href="/admin/dashboard" :class="navClass('/admin/dashboard')">Dashboard</a>
+            <a href="/admin/schedules" :class="navClass('/admin/schedules')">Create Schedules</a>
+            <a href="/admin/users" :class="navClass('/admin/users')">Users</a>
+            <a href="/admin/rooms" :class="navClass('/admin/rooms')">Resources</a>
+            <a href="/admin/export" :class="navClass('/admin/export')">Generate Reports</a>
+            <a href="/admin/settings" :class="navClass('/admin/settings')">System Settings</a>
           </nav>
           <!-- User profile always right on large screens -->
           <div ref="containerRef" class="hidden lg:flex items-center gap-2 ml-4 px-3 py-2 rounded bg-white/80 hover:bg-blue-100 transition whitespace-nowrap shadow border border-blue-100 user-profile-navbar">
@@ -52,12 +52,12 @@
           <div v-if="showMobileNav" class="fixed inset-0 z-50 bg-black bg-opacity-40 flex">
             <div class="bg-white w-72 max-w-full h-full shadow-lg p-6 flex flex-col gap-4 animate-slide-in-left">
               <button class="self-end text-2xl text-gray-500 hover:text-gray-700 mb-4" @click="showMobileNav = false">&times;</button>
-              <a href="/admin/dashboard" class="font-bold text-blue-700 underline bg-blue-50 px-3 py-2 rounded transition" @click="showMobileNav = false">Dashboard</a>
-              <a href="/admin/schedules" class="text-gray-700 px-3 py-2 rounded hover:bg-blue-100 transition" @click="showMobileNav = false">Schedules</a>
-              <a href="/admin/users" class="text-gray-700 px-3 py-2 rounded hover:bg-blue-100 transition" @click="showMobileNav = false">Users</a>
-              <a href="/admin/rooms" class="text-gray-700 px-3 py-2 rounded hover:bg-blue-100 transition" @click="showMobileNav = false">Rooms/Resources</a>
-              <a href="/admin/export" class="text-gray-700 px-3 py-2 rounded hover:bg-blue-100 transition" @click="showMobileNav = false">Export Data</a>
-              <a href="/admin/settings" class="text-gray-700 px-3 py-2 rounded hover:bg-blue-100 transition" @click="showMobileNav = false">System Settings</a>
+              <a href="/admin/dashboard" :class="navClass('/admin/dashboard', true)" @click="showMobileNav = false">Dashboard</a>
+              <a href="/admin/schedules" :class="navClass('/admin/schedules', true)" @click="showMobileNav = false">Create Schedules</a>
+              <a href="/admin/users" :class="navClass('/admin/users', true)" @click="showMobileNav = false">Users</a>
+              <a href="/admin/rooms" :class="navClass('/admin/rooms', true)" @click="showMobileNav = false">Resources</a>
+              <a href="/admin/export" :class="navClass('/admin/export', true)" @click="showMobileNav = false">Generate Reports</a>
+              <a href="/admin/settings" :class="navClass('/admin/settings', true)" @click="showMobileNav = false">System Settings</a>
               <div class="mt-6 border-t pt-4">
                 <div class="flex items-center gap-2 px-3 py-2 rounded bg-white/80 hover:bg-blue-100 transition whitespace-nowrap shadow border border-blue-100">
                   <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor" class="h-6 w-6 text-blue-600">
@@ -78,7 +78,7 @@
           </div>
         </transition>
       </header>
-      <main class="flex-1 p-2 sm:p-6 w-full max-w-full overflow-x-auto">
+      <main class="flex-1 w-full h-full p-0 sm:p-0 max-w-none overflow-x-auto">
         <slot />
       </main>
     </div>
@@ -123,6 +123,20 @@ const modalStyle = computed(() => {
     maxWidth: 'calc(100vw - 2 * 16px)',
   };
 });
+
+// Highlight active nav link
+const currentUrl = computed(() => usePage().url);
+function navClass(path, mobile = false) {
+  const isActive = currentUrl.value.startsWith(path);
+  if (isActive) {
+    return mobile
+      ? 'font-bold text-blue-700 underline bg-blue-50 px-3 py-2 rounded transition'
+      : 'font-bold text-blue-700 underline bg-blue-50 px-3 py-2 rounded transition';
+  }
+  return 'text-gray-700 px-3 py-2 rounded hover:bg-blue-100 transition';
+}
+
+const { url } = usePage();
 
 function checkNavGap() {
   nextTick(() => {

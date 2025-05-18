@@ -21,8 +21,8 @@ Route::get('/dashboard', function () {
     }
     $user = Auth::user();
     if ($user->role === 'admin') {
-        // Use the controller to provide all dashboard props
-        return app(\App\Http\Controllers\AdminDashboardController::class)->index();
+        // Redirect to canonical admin dashboard URL
+        return redirect()->route('admin.dashboard');
     } elseif ($user->role === 'scheduler') {
         return Inertia::render('Scheduler/DashboardFallback');
     } else {
@@ -50,6 +50,19 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
     Route::get('/settings', function () {
         return Inertia::render('Admin/Settings');
     })->name('admin.settings');
+    Route::resource('courses', App\Http\Controllers\CourseController::class);
+    Route::resource('majors', App\Http\Controllers\MajorController::class);
+    Route::resource('years', App\Http\Controllers\YearController::class);
+    Route::resource('semesters', App\Http\Controllers\SemesterController::class);
+    Route::resource('sections', App\Http\Controllers\SectionController::class);
+    Route::resource('teacher-qualifications', App\Http\Controllers\TeacherQualificationController::class);
+    Route::get('curriculum', [\App\Http\Controllers\CurriculumController::class, 'index']);
+    Route::post('curriculum/assign', [\App\Http\Controllers\CurriculumController::class, 'assign']);
+    Route::post('curriculum/remove', [\App\Http\Controllers\CurriculumController::class, 'remove']);
+    // User Approvals (pending users)
+    Route::get('user-approvals', [\App\Http\Controllers\UserApprovalController::class, 'index'])->name('admin.user-approvals');
+    Route::post('user-approvals/{id}/approve', [\App\Http\Controllers\UserApprovalController::class, 'approve'])->name('admin.user-approvals.approve');
+    Route::post('user-approvals/{id}/decline', [\App\Http\Controllers\UserApprovalController::class, 'decline'])->name('admin.user-approvals.decline');
 });
 
 Route::middleware('auth')->group(function () {
