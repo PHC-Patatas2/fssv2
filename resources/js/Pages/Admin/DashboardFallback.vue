@@ -40,6 +40,14 @@
             </div>
           </div>
         </div>
+        <!-- Navigation Buttons for Management Pages -->
+        <div class="flex flex-wrap gap-4 mt-8 justify-center">
+          <a href="/admin/schedules" class="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600">Manage Schedules</a>
+          <a href="/admin/rooms" class="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600">Manage Rooms</a>
+          <a href="/admin/teachers" class="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600">Manage Teachers</a>
+          <a href="/admin/subjects" class="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600">Manage Subjects</a>
+          <a href="/admin/system-report/export/pdf" class="bg-purple-600 text-white px-4 py-2 rounded shadow hover:bg-purple-700">Export System Report (PDF)</a>
+        </div>
         <!-- System Logs/Recent Activity (last 5 actions) -->
         <div class="w-full mt-8 min-w-0">
           <div class="bg-white rounded-xl shadow p-4 w-full min-w-0 overflow-x-auto">

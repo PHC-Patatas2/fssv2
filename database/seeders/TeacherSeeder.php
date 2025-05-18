@@ -8,10 +8,14 @@ class TeacherSeeder extends Seeder
 {
     public function run(): void
     {
+        DB::table('teachers')->delete();
+        DB::statement('ALTER TABLE teachers AUTO_INCREMENT = 1');
         DB::table('teachers')->insert([
             ['name' => 'Alice Johnson', 'email' => 'alice.johnson@example.com', 'contact' => '09171234567'],
             ['name' => 'Bob Smith', 'email' => 'bob.smith@example.com', 'contact' => '09179876543'],
             ['name' => 'Carol Lee', 'email' => 'carol.lee@example.com', 'contact' => '09172345678'],
+            ['name' => 'David Cruz', 'email' => 'david.cruz@example.com', 'contact' => '09173456789'],
+            ['name' => 'Eva Santos', 'email' => 'eva.santos@example.com', 'contact' => '09174567891'],
         ]);
     }
 }

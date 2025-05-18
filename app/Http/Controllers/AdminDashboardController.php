@@ -23,6 +23,10 @@ class AdminDashboardController extends Controller
         $activeSchedules = Schedule::where('status', 'active')->count();
         // System logs: last 5 activity logs
         $recentActivity = \App\Models\ActivityLog::orderBy('created_at', 'desc')->limit(5)->get();
+        $rooms = \App\Models\Room::all();
+        $teachers = \App\Models\Teacher::all();
+        $subjects = \App\Models\Subject::all();
+        $users = \App\Models\User::all();
         return Inertia::render('Admin/DashboardFallback', [
             'totalUsers' => $totalUsers,
             'adminCount' => $adminCount,
@@ -32,6 +36,10 @@ class AdminDashboardController extends Controller
             'pendingApprovals' => $pendingApprovals,
             'activeSchedules' => $activeSchedules,
             'recentActivity' => $recentActivity,
+            'rooms' => $rooms,
+            'teachers' => $teachers,
+            'subjects' => $subjects,
+            'users' => $users,
         ]);
     }
 }

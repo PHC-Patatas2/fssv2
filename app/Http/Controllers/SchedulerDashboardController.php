@@ -15,8 +15,16 @@ class SchedulerDashboardController extends Controller
     public function index(): Response
     {
         $this->logActivity('viewed_dashboard', 'dashboard', null, 'Scheduler viewed dashboard');
-        // You can pass scheduler-specific data here
-        return Inertia::render('Scheduler/DashboardFallback');
+        $rooms = \App\Models\Room::all();
+        $teachers = \App\Models\Teacher::all();
+        $subjects = \App\Models\Subject::all();
+        $schedules = \App\Models\Schedule::with(['subject', 'teacher', 'room', 'creator'])->get();
+        return Inertia::render('Scheduler/DashboardFallback', [
+            'rooms' => $rooms,
+            'teachers' => $teachers,
+            'subjects' => $subjects,
+            'schedules' => $schedules,
+        ]);
     }
 
     public function createSchedule(Request $request)

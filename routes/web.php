@@ -33,21 +33,23 @@ Route::get('/dashboard', function () {
 
 Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\AdminDashboardController::class, 'index'])->name('admin.dashboard');
-    Route::get('/create-schedule', function () {
-        return Inertia::render('Admin/ManageSchedules'); // Placeholder, update as needed
-    })->name('admin.create-schedule');
-    Route::get('/manage-schedules', function () {
-        return Inertia::render('Admin/ManageSchedules'); // Placeholder, update as needed
-    })->name('admin.manage-schedules');
-    Route::get('/records', function () {
-        return Inertia::render('Admin/Records'); // Placeholder, update as needed
-    })->name('admin.records');
-    Route::get('/system-logs', function () {
-        return Inertia::render('Admin/SystemLogs'); // Placeholder, update as needed
-    })->name('admin.system-logs');
-    Route::get('/user-approvals', [UserApprovalController::class, 'index'])->name('admin.user-approvals');
-    Route::post('/user-approvals/{id}/approve', [UserApprovalController::class, 'approve'])->name('admin.user-approvals.approve');
-    Route::post('/user-approvals/{id}/decline', [UserApprovalController::class, 'decline'])->name('admin.user-approvals.decline');
+    Route::resource('rooms', \App\Http\Controllers\RoomController::class)->except(['show', 'create', 'edit']);
+    Route::resource('teachers', \App\Http\Controllers\TeacherController::class)->except(['show', 'create', 'edit']);
+    Route::resource('subjects', \App\Http\Controllers\SubjectController::class)->except(['show', 'create', 'edit']);
+    Route::resource('schedules', \App\Http\Controllers\ScheduleController::class)->except(['show', 'create', 'edit']);
+    Route::get('schedules/export/csv', [\App\Http\Controllers\ScheduleController::class, 'exportCsv'])->name('schedules.export.csv');
+    Route::get('schedules/export/pdf', [\App\Http\Controllers\ScheduleController::class, 'exportPdf'])->name('schedules.export.pdf');
+    Route::get('system-report/export/pdf', [\App\Http\Controllers\ScheduleController::class, 'exportSystemReport'])->name('system-report.export.pdf');
+    Route::get('/users', function () {
+        $users = \App\Models\User::all();
+        return Inertia::render('Admin/Users', ['users' => $users]);
+    })->name('admin.users');
+    Route::get('/export', function () {
+        return Inertia::render('Admin/Export');
+    })->name('admin.export');
+    Route::get('/settings', function () {
+        return Inertia::render('Admin/Settings');
+    })->name('admin.settings');
 });
 
 Route::middleware('auth')->group(function () {

@@ -1,30 +1,30 @@
 <template>
-  <SchedulerLayout>
-    <div class="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-8 w-full">
+  <AdminLayout>
+    <div class="p-8">
       <h1 class="text-2xl font-bold mb-4 flex items-center gap-2">
-        <i class="fas fa-calendar-alt text-green-400" aria-hidden="true"></i> My Schedules
+        <i class="fas fa-calendar-alt text-blue-400" aria-hidden="true"></i> Manage Schedules
       </h1>
-      <div class="bg-white rounded shadow p-4 mb-4 w-full max-w-2xl">
-        <form @submit.prevent="submitSchedule" class="flex flex-wrap gap-2 items-center">
-          <select v-model="scheduleForm.subject_id" class="border p-2" required>
+      <div class="bg-white rounded shadow p-4 mb-4">
+        <form @submit.prevent="submitSchedule">
+          <select v-model="scheduleForm.subject_id" class="border p-2 mr-2" required>
             <option value="" disabled>Select Subject</option>
             <option v-for="subject in subjects" :key="subject.id" :value="subject.id">{{ subject.name }}</option>
           </select>
-          <select v-model="scheduleForm.teacher_id" class="border p-2" required>
+          <select v-model="scheduleForm.teacher_id" class="border p-2 mr-2" required>
             <option value="" disabled>Select Teacher</option>
             <option v-for="teacher in teachers" :key="teacher.id" :value="teacher.id">{{ teacher.name }}</option>
           </select>
-          <select v-model="scheduleForm.room_id" class="border p-2" required>
+          <select v-model="scheduleForm.room_id" class="border p-2 mr-2" required>
             <option value="" disabled>Select Room</option>
             <option v-for="room in rooms" :key="room.id" :value="room.id">{{ room.name }}</option>
           </select>
-          <select v-model="scheduleForm.day" class="border p-2" required>
+          <select v-model="scheduleForm.day" class="border p-2 mr-2" required>
             <option value="" disabled>Select Day</option>
             <option v-for="day in days" :key="day" :value="day">{{ day }}</option>
           </select>
-          <input v-model="scheduleForm.start_time" type="time" class="border p-2" required />
-          <input v-model="scheduleForm.end_time" type="time" class="border p-2" required />
-          <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Add</button>
+          <input v-model="scheduleForm.start_time" type="time" class="border p-2 mr-2" required />
+          <input v-model="scheduleForm.end_time" type="time" class="border p-2 mr-2" required />
+          <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Add Schedule</button>
         </form>
         <div v-if="conflictError" class="text-red-500 mt-2">{{ conflictError }}</div>
       </div>
@@ -32,7 +32,7 @@
         <a href="/admin/schedules/export/csv" class="bg-green-500 text-white px-4 py-2 rounded">Export CSV</a>
         <a href="/admin/schedules/export/pdf" class="bg-green-500 text-white px-4 py-2 rounded">Export PDF</a>
       </div>
-      <div class="bg-white rounded shadow p-4 w-full max-w-2xl">
+      <div class="bg-white rounded shadow p-4">
         <table class="min-w-full divide-y divide-gray-200">
           <thead>
             <tr>
@@ -59,18 +59,18 @@
           </tbody>
         </table>
       </div>
-      <div class="mt-8 w-full max-w-2xl">
+      <div class="mt-8">
         <h2 class="text-lg font-bold mb-2">Schedule Preview</h2>
         <ScheduleGridPreview :schedules="schedules" :subjects="subjects" :teachers="teachers" :rooms="rooms" />
       </div>
     </div>
-  </SchedulerLayout>
+  </AdminLayout>
 </template>
 
 <script setup>
 import { ref } from 'vue';
 import { router, usePage } from '@inertiajs/vue3';
-import SchedulerLayout from '@/Layouts/SchedulerLayout.vue';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
 import ScheduleGridPreview from '@/components/ScheduleGridPreview.vue';
 const schedules = usePage().props.schedules || [];
 const subjects = usePage().props.subjects || [];

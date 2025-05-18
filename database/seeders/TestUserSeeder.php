@@ -12,8 +12,9 @@ class TestUserSeeder extends Seeder
     {
         // Delete all entity edit locks first (foreign key constraint)
         DB::table('entity_edit_locks')->delete();
-        // Delete all users
+        // Delete all users (avoid truncate due to FK constraints)
         DB::table('users')->delete();
+        DB::statement('ALTER TABLE users AUTO_INCREMENT = 1');
 
         // Insert 1 approved admin
         User::create([
@@ -24,10 +25,18 @@ class TestUserSeeder extends Seeder
             'status' => 'approved',
             'last_login_at' => now()->subDays(2),
         ]);
-        // Insert 1 approved scheduler
+        // Insert 2 approved schedulers
         User::create([
-            'name' => 'Scheduler Approved',
-            'email' => 'scheduler.approved@example.com',
+            'name' => 'Scheduler Approved 1',
+            'email' => 'scheduler1@example.com',
+            'password' => Hash::make('password'),
+            'role' => 'scheduler',
+            'status' => 'approved',
+            'last_login_at' => now()->subDays(1),
+        ]);
+        User::create([
+            'name' => 'Scheduler Approved 2',
+            'email' => 'scheduler2@example.com',
             'password' => Hash::make('password'),
             'role' => 'scheduler',
             'status' => 'approved',
@@ -48,23 +57,6 @@ class TestUserSeeder extends Seeder
             'password' => Hash::make('password'),
             'role' => 'scheduler',
             'status' => 'pending',
-            'last_login_at' => null,
-        ]);
-        // Insert 2 declined schedulers
-        User::create([
-            'name' => 'Scheduler Declined 1',
-            'email' => 'scheduler.declined1@example.com',
-            'password' => Hash::make('password'),
-            'role' => 'scheduler',
-            'status' => 'declined',
-            'last_login_at' => null,
-        ]);
-        User::create([
-            'name' => 'Scheduler Declined 2',
-            'email' => 'scheduler.declined2@example.com',
-            'password' => Hash::make('password'),
-            'role' => 'scheduler',
-            'status' => 'declined',
             'last_login_at' => null,
         ]);
     }
