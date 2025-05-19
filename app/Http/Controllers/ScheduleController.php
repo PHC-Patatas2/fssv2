@@ -16,7 +16,25 @@ class ScheduleController extends Controller
     public function index(): Response
     {
         $schedules = Schedule::with(['subject', 'teacher', 'room', 'creator'])->get();
-        return Inertia::render('Admin/Schedules', ['schedules' => $schedules]);
+        $subjects = \App\Models\Subject::all();
+        $teachers = \App\Models\Teacher::all();
+        $rooms = \App\Models\Room::all();
+        $courses = \App\Models\Course::all();
+        $years = \App\Models\Year::all();
+        $semesters = \App\Models\Semester::all();
+        $majors = \App\Models\Major::all();
+        $sections = \App\Models\Section::all();
+        return Inertia::render('Admin/Schedules', [
+            'schedules' => $schedules,
+            'subjects' => $subjects,
+            'teachers' => $teachers,
+            'rooms' => $rooms,
+            'courses' => $courses,
+            'years' => $years,
+            'semesters' => $semesters,
+            'majors' => $majors,
+            'sections' => $sections,
+        ]);
     }
     public function store(Request $request)
     {

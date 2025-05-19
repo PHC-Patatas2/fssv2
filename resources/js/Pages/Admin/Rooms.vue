@@ -1,76 +1,16 @@
 <template>
   <AdminLayout>
-    <div class="p-8">
-      <h1 class="text-2xl font-bold mb-4 flex items-center gap-2">
-        <i class="fas fa-door-open text-blue-400" aria-hidden="true"></i> Manage Rooms
-      </h1>
-      <div class="mb-8">
-        <h2 class="text-xl font-semibold mb-2">Academic Resources</h2>
-        <div class="flex flex-wrap gap-2">
-          <a href="/admin/courses" class="bg-blue-100 hover:bg-blue-200 text-blue-800 px-4 py-2 rounded shadow">Courses</a>
-          <a href="/admin/majors" class="bg-blue-100 hover:bg-blue-200 text-blue-800 px-4 py-2 rounded shadow">Majors</a>
-          <a href="/admin/years" class="bg-blue-100 hover:bg-blue-200 text-blue-800 px-4 py-2 rounded shadow">Years</a>
-          <a href="/admin/semesters" class="bg-blue-100 hover:bg-blue-200 text-blue-800 px-4 py-2 rounded shadow">Semesters</a>
-          <a href="/admin/sections" class="bg-blue-100 hover:bg-blue-200 text-blue-800 px-4 py-2 rounded shadow">Sections</a>
-          <a href="/admin/subjects" class="bg-blue-100 hover:bg-blue-200 text-blue-800 px-4 py-2 rounded shadow">Subjects</a>
-          <a href="/admin/teacher-qualifications" class="bg-blue-100 hover:bg-blue-200 text-blue-800 px-4 py-2 rounded shadow">Teacher Qualifications</a>
-          <a href="/admin/curriculum" class="bg-green-100 hover:bg-green-200 text-green-800 px-4 py-2 rounded shadow">Curriculum</a>
-        </div>
-      </div>
-      <div class="bg-white rounded shadow p-4 mb-4">
-        <form @submit.prevent="submitRoom">
-          <input v-model="roomForm.name" placeholder="Room Name" class="border p-2 mr-2" required />
-          <input v-model.number="roomForm.capacity" placeholder="Capacity" type="number" class="border p-2 mr-2" />
-          <select v-model="roomForm.status" class="border p-2 mr-2">
-            <option value="available">Available</option>
-            <option value="unavailable">Unavailable</option>
-          </select>
-          <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Add Room</button>
-        </form>
-      </div>
-      <div class="bg-white rounded shadow p-4">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead>
-            <tr>
-              <th class="px-4 py-2 text-left">Name</th>
-              <th class="px-4 py-2 text-left">Capacity</th>
-              <th class="px-4 py-2 text-left">Status</th>
-              <th class="px-4 py-2 text-left">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="room in rooms" :key="room.id">
-              <td class="px-4 py-2">{{ room.name }}</td>
-              <td class="px-4 py-2">{{ room.capacity }}</td>
-              <td class="px-4 py-2">{{ room.status }}</td>
-              <td class="px-4 py-2">
-                <button @click="editRoom(room)" class="bg-yellow-400 text-white px-2 py-1 rounded mr-2">Edit</button>
-                <button @click="deleteRoom(room.id)" class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    <div class="min-h-screen bg-gray-100 w-full flex items-center justify-center">
+      <div class="text-gray-400 text-xl font-semibold">This page is currently empty. Please specify the new workflow or UI you want to build here.</div>
     </div>
   </AdminLayout>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { router, usePage } from '@inertiajs/vue3';
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-const rooms = usePage().props.rooms || [];
-const roomForm = ref({ name: '', capacity: '', status: 'available' });
-function submitRoom() {
-  router.post('/admin/rooms', roomForm.value);
-  roomForm.value = { name: '', capacity: '', status: 'available' };
-}
-function editRoom(room) {
-  roomForm.value = { ...room };
-}
-function deleteRoom(id) {
-  if (confirm('Delete this room?')) {
-    router.delete(`/admin/rooms/${id}`);
-  }
-}
+// Cleared for redesign. Add your new logic here as needed.
+import AdminLayout from '../../Layouts/AdminLayout.vue';
 </script>
+
+<style scoped>
+/* Cleared for redesign. Add your new styles here as needed. */
+</style>

@@ -1,11 +1,3 @@
-<!-- All future edits will be made with full responsiveness in mind, using best practices for adaptive layouts, text, and components across all screen sizes. This includes:
-// - Using responsive utility classes (e.g., Tailwind's sm:, md:, lg:, xl:)
-// - Ensuring containers, cards, modals, and text adapt to small and large screens
-// - Preventing overflow, overlap, and horizontal scroll
-// - Using break-words, flex-wrap, and max-widths where needed
-// - Testing all UI changes for mobile, tablet, and desktop
-// This note serves as a persistent reminder for all future code changes. -->
-
 <template>
   <AdminLayout>
     <div class="min-h-screen bg-gray-100 w-full">
@@ -37,15 +29,6 @@
             </div>
           </div>
         </div>
-        <!-- Navigation Buttons for Management Pages -->
-        <div class="flex flex-wrap gap-4 mt-8 justify-center">
-          <a href="/admin/schedules" :class="modalButtonClass + ' bg-blue-500 text-white hover:bg-blue-600'">Manage Schedules</a>
-          <a href="/admin/rooms" :class="modalButtonClass + ' bg-blue-500 text-white hover:bg-blue-600'">Manage Rooms</a>
-          <a href="/admin/teachers" :class="modalButtonClass + ' bg-blue-500 text-white hover:bg-blue-600'">Manage Teachers</a>
-          <a href="/admin/subjects" :class="modalButtonClass + ' bg-blue-500 text-white hover:bg-blue-600'">Manage Subjects</a>
-          <a href="/admin/system-report/export/pdf" :class="modalButtonClass + ' bg-purple-600 text-white hover:bg-purple-700'">Export System Report (PDF)</a>
-        </div>
-        <!-- System Logs/Recent Activity (last 5 actions) -->
         <div class="w-full mt-8 min-w-0">
           <div class="bg-white rounded-xl shadow p-4 w-full min-w-0 overflow-x-auto">
             <h2 class="text-lg sm:text-xl font-bold mb-4 flex items-center gap-2 break-words text-center sm:text-left">
@@ -75,34 +58,36 @@
       <!-- Modals -->
       <Modal :show="showApprovalsModal" @close="showApprovalsModal = false">
         <template #default>
-          <div class="p-6 sm:p-8 rounded-xl bg-white shadow-xl max-w-3xl mx-auto border border-yellow-100 min-w-[400px] overflow-x-auto">
+          <div class="p-6 sm:p-8 rounded-xl bg-white shadow-xl max-w-3xl mx-auto border border-yellow-100 min-w-[400px]">
             <h2 class="text-xl sm:text-2xl font-bold mb-6 text-center text-yellow-600">Pending User Approvals</h2>
             <div v-if="pendingApprovals?.length === 0" class="text-gray-500 text-center break-words">No pending users.</div>
-            <table v-else class="min-w-full divide-y divide-gray-200 mt-2 text-xs sm:text-sm whitespace-nowrap">
-              <thead>
-                <tr>
-                  <th class="px-4 py-2 text-left">Name</th>
-                  <th class="px-4 py-2 text-left">Email</th>
-                  <th class="px-4 py-2 text-left">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="user in pendingApprovals" :key="user.id">
-                  <td class="px-4 py-2">{{ user.name }}</td>
-                  <td class="px-4 py-2">{{ user.email }}</td>
-                  <td class="px-4 py-2 flex flex-row gap-2 items-center">
-                    <form :action="route('admin.user-approvals.approve', user.id)" method="post">
-                      <input type="hidden" name="_token" :value="csrfToken">
-                      <button :class="modalButtonClass + ' bg-green-500 text-white hover:bg-green-600 w-28'" type="submit">Approve</button>
-                    </form>
-                    <form :action="route('admin.user-approvals.decline', user.id)" method="post">
-                      <input type="hidden" name="_token" :value="csrfToken">
-                      <button :class="modalButtonClass + ' bg-red-500 text-white hover:bg-red-600 w-28'" type="submit">Decline</button>
-                    </form>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <div v-else class="max-h-80 overflow-y-auto" style="overflow-x: hidden;">
+              <table class="min-w-full divide-y divide-gray-200 mt-2 text-xs sm:text-sm whitespace-nowrap">
+                <thead>
+                  <tr>
+                    <th class="px-4 py-2 text-left">Name</th>
+                    <th class="px-4 py-2 text-left">Email</th>
+                    <th class="px-4 py-2 text-left">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="user in pendingApprovals" :key="user.id">
+                    <td class="px-4 py-2">{{ user.name }}</td>
+                    <td class="px-4 py-2">{{ user.email }}</td>
+                    <td class="px-4 py-2 flex flex-row gap-2 items-center">
+                      <form :action="route('admin.user-approvals.approve', user.id)" method="post">
+                        <input type="hidden" name="_token" :value="csrfToken">
+                        <button :class="modalButtonClass + ' bg-green-500 text-white hover:bg-green-600 w-28'" type="submit">Approve</button>
+                      </form>
+                      <form :action="route('admin.user-approvals.decline', user.id)" method="post">
+                        <input type="hidden" name="_token" :value="csrfToken">
+                        <button :class="modalButtonClass + ' bg-red-500 text-white hover:bg-red-600 w-28'" type="submit">Decline</button>
+                      </form>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </template>
       </Modal>
@@ -131,9 +116,9 @@
       </Modal>
       <Modal :show="showUsersModal" @close="showUsersModal = false">
         <template #default>
-          <div class="p-6 sm:p-8 rounded-xl bg-white shadow-xl max-w-3xl mx-auto border border-blue-100 min-w-[400px] overflow-x-auto whitespace-nowrap">
+          <div class="p-6 sm:p-8 rounded-xl bg-white shadow-xl max-w-3xl mx-auto border border-blue-100 min-w-[400px]">
             <h2 class="text-xl sm:text-2xl font-bold mb-6 text-center text-blue-700">User Accounts <span class="text-gray-500 text-lg">(Categorized)</span></h2>
-            <div>
+            <div class="max-h-80 overflow-y-auto">
               <div class="mb-6">
                 <h3 class="font-semibold text-blue-600 text-base mb-3 uppercase tracking-wide">Admins</h3>
                 <ul class="list-disc ml-6">
